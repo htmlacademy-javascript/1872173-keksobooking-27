@@ -78,7 +78,7 @@ function buildOffer(location) {
   };
 }
 
-function buildLocation() {
+export function buildLocation() {
   return {
     lat: getRandomPositiveFloat(LAT_MIN, LAT_MAX, LOCATION_PRECISION),
     lng: getRandomPositiveFloat(LNG_MIN, LNG_MAX, LOCATION_PRECISION),
@@ -96,3 +96,4 @@ function buildBookingOffer() {
 }
 
 export {buildBookingOffer};
+export {buildOffer};
