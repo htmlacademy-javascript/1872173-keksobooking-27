@@ -1,4 +1,4 @@
-import { printNumerals } from "./util.js";
+import { printNumerals } from './util.js';
 
 const templateFragment = document.querySelector('#card').content;
 const template = templateFragment.querySelector('.popup');
@@ -46,7 +46,7 @@ export function createPopup({offer, author}) {
   popupCheckInOut.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   const popupFeatures = popupElement.querySelector('.popup__features');
   if(offer.features.length) {
-    popupFeatures.textContent = offer.features.map( offer => OFFER_FEATURES[offer]).join(', ');
+    popupFeatures.textContent = offer.features.map((offer)=> OFFER_FEATURES[offer]).join(', ');
   }
   const popupDescription = popupElement.querySelector('.popup__description');
   popupDescription.textContent = offer.description;
