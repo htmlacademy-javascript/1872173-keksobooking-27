@@ -5,7 +5,7 @@ const price = orderForm.querySelector('#price');
 const typeOfHousing = orderForm.querySelector('#type');
 const timeIn = orderForm.querySelector('#timein');
 const timeOut = orderForm.querySelector('#timeout');
-const submitButton = orderForm.querySelector('.ad-form__submit');
+
 
 const ROOMS_TO_GUESTS = {
   1: ['1'],
