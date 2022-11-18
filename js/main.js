@@ -1,7 +1,9 @@
 import {buildOffer, buildLocation, buildBookingOffer} from './data.js';
-import {createPopup} from './popup.js';
+// import {createPopup} from './popup.js';
 import {formDisabled, formAdle} from './form_validation.js';
 import './user_form.js';
+import './map.js';
+import './slider.js';
 const mapCanvas = document.querySelector('#map-canvas');
 const offer = buildBookingOffer();
 
