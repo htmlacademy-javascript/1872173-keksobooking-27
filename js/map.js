@@ -81,8 +81,9 @@ const setOfferPinMarker = (offers) => {
 
 const setOnMapLoad = (cb) => map.on('load', cb);
 
-const mapInit = () => {
-  map();
+const mapInit = (offersData) => {
+  setStartAddress();
+  setOfferPinMarker(offersData);
   setMainPinMarker();
   setAddressOnPinMove();
 };

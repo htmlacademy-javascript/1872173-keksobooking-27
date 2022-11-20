@@ -1,27 +1,22 @@
 const addForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
 
-
-const toggleElementsState = (elements, state) => {
-  for (const element of elements) {
-    element.disabled = state;
-  }
+const formChangeStatus = (form) => {
+  form.querySelectorAll('fieldset, select.map__filter').forEach((fieldItem) => {
+    fieldItem.disabled = !fieldItem.disabled;
+  });
 };
 
-const formDisabled = () => {
-  addForm.classList.add('ad-form--disabled');
-  mapFilters.classList.add('ad-form--disabled');
+const formStatus = () => {
+  addForm.classList.toggle('ad-form--disabled');
 
-  toggleElementsState(addForm.children, true);
-  toggleElementsState(mapFilters.children, true);
+  formChangeStatus(addForm);
 };
 
-const formAdle = () => {
-  addForm.classList.remove('ad-form--disabled');
-  mapFilters.classList.remove('ad-form--disabled');
+const inactiveMapFilters = () => {
+  mapFilters.classList.toggle('ad-form--disabled');
 
-  toggleElementsState(addForm.children, false);
-  toggleElementsState(mapFilters.children, false);
+  formChangeStatus(mapFilters);
 };
 
-export {formDisabled, formAdle};
+export {formStatus , inactiveMapFilters};
