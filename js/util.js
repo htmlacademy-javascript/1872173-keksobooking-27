@@ -33,5 +33,7 @@ export const printNumerals = (number, titles) => {
   return `${titles[1]}`;
 };
 
-export {getRandomPositiveInteger};
-export {getRandomPositiveFloat};
+const escapeKey = (evt) => evt.key === 'Escape';
+const enterKey = (evt) => evt.key === 'Enter';
+
+export {getRandomPositiveInteger, getRandomPositiveFloat, escapeKey, enterKey};
