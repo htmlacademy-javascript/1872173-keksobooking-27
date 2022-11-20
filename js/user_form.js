@@ -1,3 +1,6 @@
+import { makeRequest } from './api.js';
+import { getSuccessfulDownloorderForm, getFailedDownloorderForm } from './message.js';
+
 const orderForm = document.querySelector('.ad-form');
 const capacityElement = orderForm.querySelector('#capacity');
 const rooms = orderForm.querySelector('#room_number');
@@ -5,6 +8,9 @@ const price = orderForm.querySelector('#price');
 const typeOfHousing = orderForm.querySelector('#type');
 const timeIn = orderForm.querySelector('#timein');
 const timeOut = orderForm.querySelector('#timeout');
+const mapFilters = document.querySelector('.map__filters');
+const submitButton = orderForm.querySelector('.ad-form__submit');
+const resetButton = orderForm.querySelector('.ad-form__reset');
 
 
 const ROOMS_TO_GUESTS = {
@@ -127,3 +133,60 @@ const ontypeOfHousingChange = () => {
 };
 
 typeOfHousing.addEventListener('change', ontypeOfHousingChange);
+
+const resettingForm = () => {
+  orderForm.reset();
+  mapFilters.reset();
+  price.placeholder = 0;
+  pristine.reset();
+};
+
+const onResetClick = () => {
+  resetButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    resettingForm();
+  });
+};
+
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+const onUserFormSubmit = (oneAction, twoAction) => {
+  orderForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+    if (isValid) {
+      const formData = new FormData(evt.target);
+      blockSubmitButton();
+      makeRequest(() => { oneAction(); twoAction(); getSuccessfulDownloorderForm(); unblockSubmitButton(); }, () => { getFailedDownloorderForm(); unblockSubmitButton(); }, 'POST', formData);
+    }
+  });
+};
+
+const formChangeStatus = (form) => {
+  form.querySelectorAll('fieldset, select.map__filter').forEach((fieldItem) => {
+    fieldItem.disabled = !fieldItem.disabled;
+  });
+};
+
+const formStatus = () => {
+  orderForm.classList.toggle('ad-form--disabled');
+
+  formChangeStatus(orderForm);
+};
+
+const inactiveMapFilters = () => {
+  mapFilters.classList.toggle('ad-form--disabled');
+
+  formChangeStatus(mapFilters);
+};
+
+export {formStatus, inactiveMapFilters, onUserFormSubmit, resettingForm, onResetClick};
