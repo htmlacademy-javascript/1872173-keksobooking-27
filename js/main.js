@@ -1,10 +1,9 @@
-import {buildOffer, buildLocation, buildBookingOffer} from './data.js';
-import {createPopup} from './popup.js';
-import {formDisabled, formAdle} from './form_validation.js';
+import {buildBookingOffer} from './data.js';
+import {mapInit} from './map.js';
+import {formStatus , inactiveMapFilters} from './form_validation.js';
 import './user_form.js';
-const mapCanvas = document.querySelector('#map-canvas');
-const offer = buildBookingOffer();
+import './slider.js';
 
-const popupNode = createPopup(offer);
+const offersArray = Array.from({ length: 5 }, buildBookingOffer);
 
-mapCanvas.append(popupNode);
+mapInit(offersArray);
