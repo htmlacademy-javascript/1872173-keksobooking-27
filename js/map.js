@@ -1,10 +1,19 @@
 import {createPopup} from './popup.js';
+import {filterData} from './sorting.js';
+import {formStatus, inactiveMapFilters} from './user_form.js';
+import {makeRequest} from './api.js';
+import {alertMessage, debounce} from './util.js';
 
 const addressElement = document.querySelector('#address');
+const resetButton = document.querySelector('.ad-form__reset');
+const mapFilters = document.querySelector('.map__filters');
+const ALLERT_MESSAGE = 'Не удалось загрузить данные, повторите попывтку.';
+const MAKS_ELEMENT = 10;
+let options = [];
 
-const START_COORDINATE = {
-  startLat: 35.683171,
-  startLng: 139.753143
+const COORDINATE = {
+  lat: 35.683171,
+  lng: 139.753143
 };
 
 
@@ -12,8 +21,8 @@ const DEFAULT_ZOOM = 10;
 
 const map = L.map('map-canvas')
   .setView({
-    lat: START_COORDINATE.startLat,
-    lng: START_COORDINATE.startLng
+    lat: COORDINATE.lat,
+    lng: COORDINATE.lng
   }, DEFAULT_ZOOM);
 
 L.tileLayer(
@@ -32,8 +41,8 @@ const mainPinIcon = L.icon({
 
 const mainPinMarker = L.marker(
   {
-    lat: START_COORDINATE.startLat,
-    lng: START_COORDINATE.startLng,
+    lat: COORDINATE.lat,
+    lng: COORDINATE.lng,
   },
   {
     draggable: true,
@@ -79,6 +88,8 @@ const setOfferPinMarker = (offers) => {
   });
 };
 
+const pointLayer = L.layerGroup().addTo(map);
+
 const setOnMapLoad = (cb) => map.on('load', cb);
 
 const mapInit = (offersData) => {
@@ -91,16 +102,68 @@ const mapInit = (offersData) => {
 const resetMap = () => {
   map.closePopup();
   map.setView({
-    lat: START_COORDINATE.startLat,
-    lng: START_COORDINATE.startLng
+    lat: COORDINATE.lat,
+    lng: COORDINATE.lng
   }, DEFAULT_ZOOM);
   mainPinMarker.setLatLng({
-    lat: START_COORDINATE.startLat,
-    lng: START_COORDINATE.startLng
+    lat: COORDINATE.lat,
+    lng: COORDINATE.lng
   });
 };
 
+const removePoints = () => {
+  pointLayer.clearLayers();
+};
 
-export { mapInit, setStartAddress, setOnMapLoad, setMainPinMarker, setOfferPinMarker, resetMap };
+const onMapFilterChange = () => {
+  removePoints();
+
+  setOfferPinMarker(filterData(options), createPopup);
+};
+
+const onSuccess = (data) => {
+  options = data.slice();
+
+  inactiveMapFilters();
+  setOfferPinMarker(options.slice(0, MAKS_ELEMENT), createPopup);
+
+  mapFilters.addEventListener('change', debounce(onMapFilterChange));
+};
+
+const onError = () => {
+  alertMessage(ALLERT_MESSAGE);
+};
+
+map.on('load', () => {
+  formStatus();
+  makeRequest(onSuccess, onError, 'GET');
+})
+  .setView({
+    lat: COORDINATE.lat,
+    lng: COORDINATE.lng,
+  }, DEFAULT_ZOOM);
+
+const onButtonResetClick = () => {
+  mainPinMarker.setlatlng({
+    lat: COORDINATE.lat,
+    lng: COORDINATE.lng,
+  });
+
+  map.setView({
+    lat: COORDINATE.lat,
+    lng: COORDINATE.lng,
+  }, DEFAULT_ZOOM);
+
+  removePoints();
+
+  setOfferPinMarker(options.slice(0, MAKS_ELEMENT), createPopup);
+
+};
+
+resetButton.addEventListener('click', () => {
+  onButtonResetClick();
+});
+
+export { mapInit, setStartAddress, setOnMapLoad, setMainPinMarker, setOfferPinMarker, resetMap, onButtonResetClick };
 
 

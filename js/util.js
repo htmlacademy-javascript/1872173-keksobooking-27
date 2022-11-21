@@ -1,3 +1,5 @@
+const ALERT_TIME = 5000;
+
 function getRandomPositiveInteger (a, b) {
   if (a < 0 || b < 0) {
     return NaN;
@@ -36,4 +38,35 @@ export const printNumerals = (number, titles) => {
 const escapeKey = (evt) => evt.key === 'Escape';
 const enterKey = (evt) => evt.key === 'Enter';
 
-export {getRandomPositiveInteger, getRandomPositiveFloat, escapeKey, enterKey};
+const alertMessage = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = '100';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '0';
+  alertContainer.style.right = '0';
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_TIME);
+};
+
+
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export {getRandomPositiveInteger, getRandomPositiveFloat, escapeKey, enterKey, debounce, alertMessage};
