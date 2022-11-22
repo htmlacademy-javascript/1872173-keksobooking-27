@@ -45,7 +45,7 @@ export function createPopup({offer, author}) {
   const popupCheckInOut = popupElement.querySelector('.popup__text--time');
   popupCheckInOut.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
   const popupFeatures = popupElement.querySelector('.popup__features');
-  if(offer.features.length) {
+  if(offer.features?.length) {
     popupFeatures.textContent = offer.features.map((offer)=> OFFER_FEATURES[offer]).join(', ');
   }
   const popupDescription = popupElement.querySelector('.popup__description');
@@ -58,9 +58,9 @@ export function createPopup({offer, author}) {
   autorAvatar.src = author.avatar;
 
   const galleryPopup = popupElement.querySelector('.popup__photos');
-  createGalery(galleryPopup, offer.photos);
-
-
+  if (offer.photos) {
+    createGalery(galleryPopup, offer.photos);
+  }
   return popupElement;
 }
 

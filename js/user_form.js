@@ -54,7 +54,7 @@ pristine.addValidator(
 );
 
 function validatePrice (value) {
-  return value.length > 100000;
+  return value < 100000;
 }
 
 pristine.addValidator(

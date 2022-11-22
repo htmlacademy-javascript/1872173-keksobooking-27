@@ -26,7 +26,9 @@ noUiSlider.create(sliderElement, {
 });
 
 sliderElement.noUiSlider.on('update', () => {
+  const evt = new Event('change');
   valueElement.value = sliderElement.noUiSlider.get();
+  valueElement.dispatchEvent(evt);
 });
 
 const sliderReset = () => {
