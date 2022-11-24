@@ -1,6 +1,6 @@
 import { makeRequest } from './api.js';
 import { getSuccessfulDownloorderForm, getFailedDownloorderForm } from './message.js';
-import { sliderReset } from './slider.js';
+import { resetSlider } from './slider.js';
 import { resetImages } from './avatar.js';
 
 const orderForm = document.querySelector('.ad-form');
@@ -63,14 +63,14 @@ pristine.addValidator(
   'Не более 100 000'
 );
 
-const capacityCheck = () => ROOMS_TO_GUESTS[rooms.value].includes(capacityElement.value);
+const checkCapacity = () => ROOMS_TO_GUESTS[rooms.value].includes(capacityElement.value);
 
 const getСapacityElementErrorMessage = () => `Для такого количества гостей подойдёт ${GUESTS_TO_ROOMS[capacityElement.value].join(' или ')}`;
 
 
 pristine.addValidator(
   capacityElement,
-  capacityCheck,
+  checkCapacity,
   getСapacityElementErrorMessage
 );
 
@@ -83,7 +83,7 @@ const getRoomElementErrorMessage = () => {
 
 pristine.addValidator(
   rooms,
-  capacityCheck,
+  checkCapacity,
   getRoomElementErrorMessage
 );
 
@@ -157,7 +157,7 @@ typeOfHousing.addEventListener('change', ontypeOfHousingChange);
 const resettingForm = () => {
   orderForm.reset();
   mapFilters.reset();
-  price.placeholder = 0;
+  price.placeholder = 1000;
   pristine.reset();
 };
 
@@ -187,11 +187,10 @@ const onUserFormSubmit = (oneAction, twoAction) => {
     if (isValid) {
       const formData = new FormData(evt.target);
       blockSubmitButton();
-      sliderReset();
-      makeRequest(() => { oneAction(); twoAction(); getSuccessfulDownloorderForm(); unblockSubmitButton(); }, () => { getFailedDownloorderForm(); unblockSubmitButton(); }, 'POST', formData);
+      resetSlider();
+      makeRequest(() => { oneAction(); twoAction(); resetImages(); getSuccessfulDownloorderForm(); unblockSubmitButton(); }, () => { getFailedDownloorderForm(); unblockSubmitButton(); }, 'POST', formData);
     }
   });
 };
-
 
 export {formStatus, inactiveMapFilters, onUserFormSubmit, resettingForm, onResetClick};

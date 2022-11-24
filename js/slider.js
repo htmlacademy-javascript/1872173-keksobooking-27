@@ -3,14 +3,12 @@ const valueElement = document.querySelector('#price');
 const MAX_PRICE = 100000;
 const resetButton = document.querySelector('.ad-form__reset');
 
-valueElement.value = 5000;
-
 noUiSlider.create(sliderElement, {
   range: {
     min: 0,
     max: MAX_PRICE,
   },
-  start: 0,
+  start: 1000,
   step: 500,
   connect: 'lower',
   format: {
@@ -25,13 +23,14 @@ noUiSlider.create(sliderElement, {
   },
 });
 
+
 sliderElement.noUiSlider.on('update', () => {
   const evt = new Event('change');
   valueElement.value = sliderElement.noUiSlider.get();
   valueElement.dispatchEvent(evt);
 });
 
-const sliderReset = () => {
+const resetSlider = () => {
   sliderElement.noUiSlider.reset();
 };
 
@@ -39,7 +38,7 @@ const sliderReset = () => {
 resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
 
-  sliderReset();
+  resetSlider();
 });
 
-export {sliderReset};
+export {resetSlider};
