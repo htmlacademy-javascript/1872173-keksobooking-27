@@ -30,11 +30,11 @@ const GUESTS_TO_ROOMS = {
 };
 
 const ROOM_TYPE_PRICE = {
-  bungalow: '0',
-  flat: '1000',
-  hotel: '3000',
-  house: '5000',
-  palace: '10000'
+  'bungalow': 0,
+  'flat': 1000,
+  'hotel': 3000,
+  'house': 5000,
+  'palace': 10000
 };
 
 const pristine = new Pristine(orderForm, {
@@ -187,8 +187,7 @@ const onUserFormSubmit = (oneAction, twoAction) => {
     if (isValid) {
       const formData = new FormData(evt.target);
       blockSubmitButton();
-      resetSlider();
-      makeRequest(() => { oneAction(); twoAction(); resetImages(); getSuccessfulDownloorderForm(); unblockSubmitButton(); }, () => { getFailedDownloorderForm(); unblockSubmitButton(); }, 'POST', formData);
+      makeRequest(() => { oneAction(); twoAction(); resetImages(); resetSlider(); getSuccessfulDownloorderForm(); unblockSubmitButton(); }, () => { getFailedDownloorderForm(); unblockSubmitButton(); }, 'POST', formData);
     }
   });
 };

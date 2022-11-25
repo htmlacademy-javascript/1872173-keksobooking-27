@@ -6,30 +6,27 @@ const patternSuccess = document.querySelector('#success').content.querySelector(
 const patternFailed = document.querySelector('#error').content.querySelector('.error');
 
 
-const onSuccessMessageEscKeydown = (evt) => {
-  if (escapeKey(evt)) {
-    evt.preventDefault();
-    body.removeChild(body.querySelector('.success'));
-
-  }
-};
-
-
 const onSuccessMessageClick = () => {
-  body.removeChild(body.querySelector('.success'));
-
+  body.querySelector('.success').remove();
+  document.removeEventListener('keydown', onSuccessMessageEscKeydown, { once: true });
+  document.removeEventListener('click', onSuccessMessageClick, { once: true });
 };
 
 const closeOpenSuccessMessage = () => {
   document.addEventListener('keydown', onSuccessMessageEscKeydown, { once: true });
   document.addEventListener('click', onSuccessMessageClick, { once: true });
-
 };
+
+function onSuccessMessageEscKeydown (evt) {
+  if (escapeKey(evt)) {
+    evt.preventDefault();
+    onSuccessMessageClick();
+  }
+}
 
 const getSuccessfulDownloorderForm = () => {
   const ticetElement = patternSuccess.cloneNode(true);
   body.append(ticetElement);
-
   closeOpenSuccessMessage();
 };
 
