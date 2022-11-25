@@ -1,4 +1,4 @@
-const MAKS_ELEMENT = 10;
+const MAX_ELEMENT = 10;
 const DEFAULT_VALUE = 'any';
 
 const priceHouse = {
@@ -35,7 +35,7 @@ const filterData = (data) => {
   let i = 0;
   let isResult;
 
-  while (i < data.length && filteredOffers.length < MAKS_ELEMENT) {
+  while (i < data.length && filteredOffers.length < MAX_ELEMENT) {
     isResult = mapFilters.every((filter) => (filter.value === DEFAULT_VALUE) ? true : filterRules[filter.id](data[i], filter));
 
 

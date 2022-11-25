@@ -1,9 +1,9 @@
-import {mapInit , resetMap} from './map.js';
+import {initMap , resetMap} from './map.js';
 import './slider.js';
-import { formStatus, inactiveMapFilters, onUserFormSubmit, resettingForm, onResetClick } from './user_form.js';
+import { formStatus, inactiveMapFilters, onUserFormSubmit, resettingForm, onResetClick } from './user-form.js';
 import './message.js';
 
-mapInit();
+initMap();
 
 formStatus();
 inactiveMapFilters();

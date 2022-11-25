@@ -11,14 +11,12 @@ const OFFER_TYPES = {
   hotel: 'Отель',
 };
 
-const OFFER_FEATURES = {
-  wifi: 'WiFi',
-  dishwasher: 'Посудомоечная машина',
-  parking: 'Парковка',
-  washer: 'Душ',
-  elevator: 'Лифт',
-  conditioner: 'Кондиционер',
+const removeElement = (fullArray, needArray) => {
+  fullArray.forEach((arrayItem) => {
+    if (needArray.indexOf(arrayItem.classList[1].replace('popup__feature--', '')) === -1) { arrayItem.remove(); }
+  });
 };
+
 
 const createGalery = (container, photos) => {
   const photoNode = container.querySelector('.popup__photo');
@@ -31,7 +29,7 @@ const createGalery = (container, photos) => {
 };
 
 
-export function createPopup({offer, author}) {
+const createPopup = ({offer, author}) => {
   const popupElement = template.cloneNode(true);
 
   const popupTitle = popupElement.querySelector('.popup__title');
@@ -44,10 +42,15 @@ export function createPopup({offer, author}) {
   popupGuestRoom.textContent = `${offer.rooms} ${printNumerals(offer.rooms, ['комната','комнаты', 'комнат'])} для ${offer.guests} ${printNumerals(offer.guests, ['гость','гостя', 'гостей'])}`;
   const popupCheckInOut = popupElement.querySelector('.popup__text--time');
   popupCheckInOut.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
+
   const popupFeatures = popupElement.querySelector('.popup__features');
-  if(offer.features?.length) {
-    popupFeatures.textContent = offer.features.map((offer)=> OFFER_FEATURES[offer]).join(', ');
+  const feature = popupFeatures.querySelectorAll('.popup__feature');
+  if (offer.features) {
+    removeElement(feature, offer.features);
+  } else {
+    popupFeatures.remove();
   }
+
   const popupDescription = popupElement.querySelector('.popup__description');
   popupDescription.textContent = offer.description;
   const popupType = popupElement.querySelector('.popup__type');
@@ -61,7 +64,11 @@ export function createPopup({offer, author}) {
   if (offer.photos) {
     createGalery(galleryPopup, offer.photos);
   }
+  else {
+    galleryPopup.remove();
+  }
   return popupElement;
-}
+};
 
 
+export {createPopup};

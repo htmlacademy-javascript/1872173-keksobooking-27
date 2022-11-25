@@ -1,14 +1,14 @@
 import {createPopup} from './popup.js';
 import {filterData} from './sorting.js';
-import {formStatus, inactiveMapFilters} from './user_form.js';
+import {formStatus, inactiveMapFilters} from './user-form.js';
 import {makeRequest} from './api.js';
-import {alertMessage, debounce} from './util.js';
+import {setAlertMessage, debounce} from './util.js';
 
 const addressElement = document.querySelector('#address');
 const resetButton = document.querySelector('.ad-form__reset');
 const mapFilters = document.querySelector('.map__filters');
 const ALLERT_MESSAGE = 'Не удалось загрузить данные, повторите попытку.';
-const MAKS_ELEMENT = 10;
+const MAX_ELEMENT = 10;
 let options = [];
 
 const COORDINATE = {
@@ -67,13 +67,13 @@ const setMainPinMarker = () => mainPinMarker.addTo(map);
 
 const setStartAddress = () => {
   const { lat, lng } = mainPinMarker.getLatLng();
-  addressElement.value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+  addressElement.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
 };
 
 const setAddressOnPinMove = () => {
   mainPinMarker.on('move', (evt) => {
     const { lat, lng } = evt.target.getLatLng();
-    addressElement.value = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+    addressElement.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
   });
 };
 
@@ -93,15 +93,17 @@ const setOfferPinMarker = (offers, cb) => {
 };
 
 
-const setOnMapLoad = (cb) => map.on('load', cb);
-
-const mapInit = () => {
+const initMap = () => {
   setStartAddress();
   setMainPinMarker();
   setAddressOnPinMove();
 };
 
-function resetMap () {
+const removePoints = () => {
+  pointLayer.clearLayers();
+};
+
+const resetMap = () => {
   map.closePopup();
   map.setView({
     lat: COORDINATE.lat,
@@ -114,35 +116,31 @@ function resetMap () {
 
   removePoints();
 
-  setOfferPinMarker(options.slice(0, MAKS_ELEMENT), createPopup);
-}
+  setOfferPinMarker(options.slice(0, MAX_ELEMENT), createPopup);
+};
 
-function removePoints () {
-  pointLayer.clearLayers();
-}
-
-function onMapFilterChange () {
+const onMapFilterChange = () => {
   removePoints();
 
   setOfferPinMarker(filterData(options), createPopup);
-}
+};
 
 function onSuccess (data) {
   options = data.slice();
 
   inactiveMapFilters();
-  setOfferPinMarker(options.slice(0, MAKS_ELEMENT), createPopup);
+  setOfferPinMarker(options.slice(0, MAX_ELEMENT), createPopup);
 
   mapFilters.addEventListener('change', debounce(onMapFilterChange));
 }
 
 function onError () {
-  alertMessage(ALLERT_MESSAGE);
+  setAlertMessage(ALLERT_MESSAGE);
 }
 
 resetButton.addEventListener('click', () => {
   resetMap();
 });
 
-export { mapInit, setStartAddress, setOnMapLoad, setMainPinMarker, setOfferPinMarker, resetMap };
+export { initMap, setStartAddress, setMainPinMarker, setOfferPinMarker, resetMap };
 
