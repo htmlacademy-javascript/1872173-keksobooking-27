@@ -16,7 +16,6 @@ export const printNumerals = (number, titles) => {
 };
 
 const escapeKey = (evt) => evt.key === 'Escape';
-const enterKey = (evt) => evt.key === 'Enter';
 
 const setAlertMessage = (message) => {
   const alertContainer = document.createElement('div');
@@ -49,4 +48,4 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
-export { escapeKey, enterKey, debounce, setAlertMessage};
+export { escapeKey, debounce, setAlertMessage};
